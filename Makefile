@@ -67,10 +67,11 @@ ENABLE_RDISC_SERVER=no
 #-Wstrict-prototypes: 如果函数的声明或定义没有指出参数类型，编译器就发出警告
 CCOPT=-fno-strict-aliasing -Wstrict-prototypes -Wall -g
 CCOPTOPT=-O3#o3优化
-GLIBCFIX=-D_GNU_SOURCE
+GLIBCFIX=-D_GNU_SOURCE  #符合GNU规范
 DEFINES=
 LDLIB=
 
+#如果过滤掉参数1中的除了静态函数外的其他函数，就将
 FUNC_LIB = $(if $(filter static,$(1)),$(LDFLAG_STATIC) $(2) $(LDFLAG_DYNAMIC),$(2))
 
 # USE_GNUTLS: DEF_GNUTLS, LIB_GNUTLS
@@ -216,8 +217,8 @@ ninfod:
 
 # -------------------------------------
 # modules / check-kernel are only for ancient kernels; obsolete
-check-kernel:
-ifeq ($(KERNEL_INCLUDE),)
+check-kernel: #检查内核
+ifeq ($(KERNEL_INCLUDE),) #如果KERNEL_INCLUDE是空的，就输出错误
 	@echo "Please, set correct KERNEL_INCLUDE"; false
 else
 	@set -e; \
@@ -254,17 +255,17 @@ distclean: clean
 snapshot:
 	@if [ x"$(UNAME_N)" != x"pleiades" ]; then echo "Not authorized to advance snapshot"; exit 1; fi
 	@echo "[$(TAG)]" > RELNOTES.NEW  #输出所有的TAG到RELNOTES.NEW文件
-	@echo >>RELNOTES.NEW             
+	@echo >>RELNOTES.NEW             #输出一个空行重定向到RELNOTES.NEW 文档
 	@git log --no-merges $(LASTTAG).. | git shortlog >> RELNOTES.NEW #git log日志
 	@echo >> RELNOTES.NEW
 	@cat RELNOTES >> RELNOTES.NEW      #复制RELENOTES内容到 RELNOTES.NEW
 	@mv RELNOTES.NEW RELNOTES          #移动RELNOTES到RELNOTES
-	@sed -e "s/^%define ssdate .*/%define ssdate $(DATE)/" iputils.spec > iputils.spec.tmp
-	@mv iputils.spec.tmp iputils.spec
-	@echo "static char SNAPSHOT[] = \"$(TAG)\";" > SNAPSHOT.h
-	@$(MAKE) -C doc snapshot
-	@$(MAKE) man
+	@sed -e "s/^%define ssdate .*/%define ssdate $(DATE)/" iputils.spec > iputils.spec.tmp #
+	@mv iputils.spec.tmp iputils.spec # 把iputils.spec.tmp 重命名iputils.spec
+	@echo "static char SNAPSHOT[] = \"$(TAG)\";" > SNAPSHOT.h #
+	@$(MAKE) -C doc snapshot #把snapshot生成doc文档
+	@$(MAKE) man #执行man命令
 	@git commit -a -m "iputils-$(TAG)"#git commit 
-	@git tag -s -m "iputils-$(TAG)" $(TAG)
-	@git archive --format=tar --prefix=iputils-$(TAG)/ $(TAG) | bzip2 -9 > ../iputils-$(TAG).tar.bz2
+	@git tag -s -m "iputils-$(TAG)" $(TAG) #创建标签，添加私钥签名
+	@git archive --format=tar --prefix=iputils-$(TAG)/ $(TAG) | bzip2 -9 > ../iputils-$(TAG).tar.bz2 #打包供下载
 
