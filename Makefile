@@ -46,14 +46,16 @@ WITHOUT_IFADDRS=no
 ARPING_DEFAULT_DEVICE=
 
 # GNU TLS library for ping6 [yes|no|static]
-#支持GNU TLS 库
+#支持ping6的GNU TLS 库
 USE_GNUTLS=yes
 # Crypto library for ping6 [shared|static]
-#共享crypto 库
+#支持ping6的crypto 库
 USE_CRYPTO=shared
 # Resolv library for ping6 [yes|static]
+#支持ping6的Resolv 库
 USE_RESOLV=yes
 # ping6 source routing (deprecated by RFC5095) [no|yes|RFC3542]
+#ping6源路由
 ENABLE_PING6_RTHDR=no
 
 # rdisc server (-r option) support [no|yes]
@@ -73,6 +75,7 @@ FUNC_LIB = $(if $(filter static,$(1)),$(LDFLAG_STATIC) $(2) $(LDFLAG_DYNAMIC),$(
 
 # USE_GNUTLS: DEF_GNUTLS, LIB_GNUTLS
 # USE_CRYPTO: LIB_CRYPTO
+#使用
 ifneq ($(USE_GNUTLS),no)
 	LIB_CRYPTO = $(call FUNC_LIB,$(USE_GNUTLS),$(LDFLAG_GNUTLS))
 	DEF_CRYPTO = -DUSE_GNUTLS
@@ -260,7 +263,7 @@ snapshot:
 	@echo "static char SNAPSHOT[] = \"$(TAG)\";" > SNAPSHOT.h
 	@$(MAKE) -C doc snapshot
 	@$(MAKE) man
-	@git commit -a -m "iputils-$(TAG)"
+	@git commit -a -m "iputils-$(TAG)"#git commit 
 	@git tag -s -m "iputils-$(TAG)" $(TAG)
 	@git archive --format=tar --prefix=iputils-$(TAG)/ $(TAG) | bzip2 -9 > ../iputils-$(TAG).tar.bz2
 
