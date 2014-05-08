@@ -75,7 +75,7 @@ FUNC_LIB = $(if $(filter static,$(1)),$(LDFLAG_STATIC) $(2) $(LDFLAG_DYNAMIC),$(
 
 # USE_GNUTLS: DEF_GNUTLS, LIB_GNUTLS
 # USE_CRYPTO: LIB_CRYPTO
-#使用
+
 ifneq ($(USE_GNUTLS),no)
 	LIB_CRYPTO = $(call FUNC_LIB,$(USE_GNUTLS),$(LDFLAG_GNUTLS))
 	DEF_CRYPTO = -DUSE_GNUTLS
@@ -234,7 +234,7 @@ man:
 html:
 	$(MAKE) -C doc html
 
-clean:
+clean:#删除生成的.o文件、目标文件
 	@rm -f *.o $(TARGETS)
 	@$(MAKE) -C Modules clean
 	@$(MAKE) -C doc clean
@@ -252,12 +252,12 @@ distclean: clean
 # -------------------------------------
 snapshot:
 	@if [ x"$(UNAME_N)" != x"pleiades" ]; then echo "Not authorized to advance snapshot"; exit 1; fi
-	@echo "[$(TAG)]" > RELNOTES.NEW
-	@echo >>RELNOTES.NEW
-	@git log --no-merges $(LASTTAG).. | git shortlog >> RELNOTES.NEW
+	@echo "[$(TAG)]" > RELNOTES.NEW  #输出所有的TAG到RELNOTES.NEW文件
+	@echo >>RELNOTES.NEW             
+	@git log --no-merges $(LASTTAG).. | git shortlog >> RELNOTES.NEW #git log日志
 	@echo >> RELNOTES.NEW
-	@cat RELNOTES >> RELNOTES.NEW
-	@mv RELNOTES.NEW RELNOTES
+	@cat RELNOTES >> RELNOTES.NEW      #复制RELENOTES内容到 RELNOTES.NEW
+	@mv RELNOTES.NEW RELNOTES          #移动RELNOTES到RELNOTES
 	@sed -e "s/^%define ssdate .*/%define ssdate $(DATE)/" iputils.spec > iputils.spec.tmp
 	@mv iputils.spec.tmp iputils.spec
 	@echo "static char SNAPSHOT[] = \"$(TAG)\";" > SNAPSHOT.h
