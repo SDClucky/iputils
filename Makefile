@@ -12,8 +12,9 @@ LIBC_INCLUDE=/usr/include
 ADDLIB=
 # Linker flags
 
-LDFLAG_STATIC=-Wl,-Bstatic
-LDFLAG_DYNAMIC=-Wl,-Bdynamic
+LDFLAG_STATIC=-Wl,-Bstatic#-Wl,-Bstatic告诉链接器使用-Bstatic选项，该选项是告诉链接器，对接下来的-l选项使用静态链接
+LDFLAG_DYNAMIC=-Wl,-Bdynamic#-Wl,-Bdynamic就是告诉链接器对接下来的-l选项使用动态链接
+#指定加载库
 LDFLAG_CAP=-lcap
 LDFLAG_GNUTLS=-lgnutls-openssl
 LDFLAG_CRYPTO=-lcrypto
@@ -24,7 +25,7 @@ LDFLAG_SYSFS=-lsysfs
 #
 # Options
 #
-
+#变量定义，设置开关
 # Capability support (with libcap) [yes|static|no]
 USE_CAP=yes
 # sysfs support (with libsysfs - deprecated) [no|yes|static]
@@ -52,6 +53,7 @@ ENABLE_RDISC_SERVER=no
 # -------------------------------------
 # What a pity, all new gccs are buggy and -Werror does not work. Sigh.
 # CCOPT=-fno-strict-aliasing -Wstrict-prototypes -Wall -Werror -g
+#-Wstrict-prototypes: 如果函数的声明或定义没有指出参数类型，编译器就发出警告
 CCOPT=-fno-strict-aliasing -Wstrict-prototypes -Wall -g
 CCOPTOPT=-O3
 GLIBCFIX=-D_GNU_SOURCE
