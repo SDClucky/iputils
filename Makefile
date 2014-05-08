@@ -6,15 +6,17 @@
 CC=gcc
 #使用gcc程序编译
 # Path to parent kernel include files directory
-LIBC_INCLUDE=/usr/include
 #指定头文件所在的库
+LIBC_INCLUDE=/usr/include
 # Libraries
+#函数库
 ADDLIB=
 # Linker flags
+#链接器
 
 LDFLAG_STATIC=-Wl,-Bstatic#-Wl,-Bstatic告诉链接器使用-Bstatic选项，该选项是告诉链接器，对接下来的-l选项使用静态链接
 LDFLAG_DYNAMIC=-Wl,-Bdynamic#-Wl,-Bdynamic就是告诉链接器对接下来的-l选项使用动态链接
-#指定加载库
+#链接器的参数
 LDFLAG_CAP=-lcap
 LDFLAG_GNUTLS=-lgnutls-openssl
 LDFLAG_CRYPTO=-lcrypto
@@ -27,20 +29,27 @@ LDFLAG_SYSFS=-lsysfs
 #
 #变量定义，设置开关
 # Capability support (with libcap) [yes|static|no]
+#支持capability
 USE_CAP=yes
 # sysfs support (with libsysfs - deprecated) [no|yes|static]
+#支持sysfs
 USE_SYSFS=no
 # IDN support (experimental) [no|yes|static]
+#支持IDN
 USE_IDN=no
 
 # Do not use getifaddrs [no|yes|static]
+#不使用getifaddrs
 WITHOUT_IFADDRS=no
 # arping default device (e.g. eth0) []
+#arping 默认设备
 ARPING_DEFAULT_DEVICE=
 
 # GNU TLS library for ping6 [yes|no|static]
+#支持GNU TLS 库
 USE_GNUTLS=yes
 # Crypto library for ping6 [shared|static]
+#共享crypto 库
 USE_CRYPTO=shared
 # Resolv library for ping6 [yes|static]
 USE_RESOLV=yes
@@ -55,7 +64,7 @@ ENABLE_RDISC_SERVER=no
 # CCOPT=-fno-strict-aliasing -Wstrict-prototypes -Wall -Werror -g
 #-Wstrict-prototypes: 如果函数的声明或定义没有指出参数类型，编译器就发出警告
 CCOPT=-fno-strict-aliasing -Wstrict-prototypes -Wall -g
-CCOPTOPT=-O3
+CCOPTOPT=-O3#o3优化
 GLIBCFIX=-D_GNU_SOURCE
 DEFINES=
 LDLIB=
