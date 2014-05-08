@@ -138,9 +138,10 @@ TAG:=$(shell date --date=$(TODAY) +s%Y%m%d)
 
 
 # -------------------------------------
-.PHONY: all ninfod clean distclean man html check-kernel modules snapshot
+#编译规则
+.PHONY: all ninfod clean distclean man html check-kernel modules snapshot  #隐含规则
 
-all: $(TARGETS)
+all: $(TARGETS)#目标文件
 
 %.s: %.c
 	$(COMPILE.c) $< $(DEF_$(patsubst %.o,%,$@)) -S -o $@
