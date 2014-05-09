@@ -71,42 +71,41 @@ GLIBCFIX=-D_GNU_SOURCE  #符合GNU规范
 DEFINES=
 LDLIB=
 
-#如果过滤掉参数1中的除了静态函数外的其他函数，就将
 FUNC_LIB = $(if $(filter static,$(1)),$(LDFLAG_STATIC) $(2) $(LDFLAG_DYNAMIC),$(2))
 
 # USE_GNUTLS: DEF_GNUTLS, LIB_GNUTLS
 # USE_CRYPTO: LIB_CRYPTO
 
-ifneq ($(USE_GNUTLS),no)
-	LIB_CRYPTO = $(call FUNC_LIB,$(USE_GNUTLS),$(LDFLAG_GNUTLS))
+ifneq ($(USE_GNUTLS),no)#如果USE_GNUTLS不是no
+	LIB_CRYPTO = $(call FUNC_LIB,$(USE_GNUTLS),$(LDFLAG_GNUTLS)) #参数传递， FUNC_LIB调用USE_GNUTLS、LDFLAG_GNUTLS，将结果赋给LIB_CRYPTO
 	DEF_CRYPTO = -DUSE_GNUTLS
 else
-	LIB_CRYPTO = $(call FUNC_LIB,$(USE_CRYPTO),$(LDFLAG_CRYPTO))
+	LIB_CRYPTO = $(call FUNC_LIB,$(USE_CRYPTO),$(LDFLAG_CRYPTO))# FUNC_LIB调用USE_CRYPTO,$(LDFLAG_CRYPTO，将结果赋给LIB_CRYPTO
 endif
 
 # USE_RESOLV: LIB_RESOLV
-LIB_RESOLV = $(call FUNC_LIB,$(USE_RESOLV),$(LDFLAG_RESOLV))
+LIB_RESOLV = $(call FUNC_LIB,$(USE_RESOLV),$(LDFLAG_RESOLV))#参数调用
 
 # USE_CAP:  DEF_CAP, LIB_CAP
 ifneq ($(USE_CAP),no)
 	DEF_CAP = -DCAPABILITIES
-	LIB_CAP = $(call FUNC_LIB,$(USE_CAP),$(LDFLAG_CAP))
+	LIB_CAP = $(call FUNC_LIB,$(USE_CAP),$(LDFLAG_CAP))#参数调用
 endif
 
 # USE_SYSFS: DEF_SYSFS, LIB_SYSFS
 ifneq ($(USE_SYSFS),no)
 	DEF_SYSFS = -DUSE_SYSFS
-	LIB_SYSFS = $(call FUNC_LIB,$(USE_SYSFS),$(LDFLAG_SYSFS))
+	LIB_SYSFS = $(call FUNC_LIB,$(USE_SYSFS),$(LDFLAG_SYSFS))#参数调用
 endif
 
 # USE_IDN: DEF_IDN, LIB_IDN
 ifneq ($(USE_IDN),no)
 	DEF_IDN = -DUSE_IDN
-	LIB_IDN = $(call FUNC_LIB,$(USE_IDN),$(LDFLAG_IDN))
+	LIB_IDN = $(call FUNC_LIB,$(USE_IDN),$(LDFLAG_IDN))#参数调用
 endif
 
 # WITHOUT_IFADDRS: DEF_WITHOUT_IFADDRS
-ifneq ($(WITHOUT_IFADDRS),no)
+ifneq ($(WITHOUT_IFADDRS),no)   #判断
 	DEF_WITHOUT_IFADDRS = -DWITHOUT_IFADDRS
 endif
 
@@ -140,16 +139,16 @@ TAG:=$(shell date --date=$(TODAY) +s%Y%m%d)
 
 # -------------------------------------
 #编译规则
-.PHONY: all ninfod clean distclean man html check-kernel modules snapshot  #隐含规则
+.PHONY: all ninfod clean distclean man html check-kernel modules snapshot  #隐含规则、伪指令
 
 all: $(TARGETS)#目标文件
 
 %.s: %.c
-	$(COMPILE.c) $< $(DEF_$(patsubst %.o,%,$@)) -S -o $@
+	$(COMPILE.c) $< $(DEF_$(patsubst %.o,%,$@)) -S -o $@   #把所有的.c文件编译成.s文件
 %.o: %.c
-	$(COMPILE.c) $< $(DEF_$(patsubst %.o,%,$@)) -o $@
+	$(COMPILE.c) $< $(DEF_$(patsubst %.o,%,$@)) -o $@      #把所有的.c文件编译成.o文件
 $(TARGETS): %: %.o
-	$(LINK.o) $^ $(LIB_$@) $(LDLIBS) -o $@
+	$(LINK.o) $^ $(LIB_$@) $(LDLIBS) -o $@                 #把所有的.o文件编译成可执行文件
 
 # -------------------------------------
 # arping
@@ -236,7 +235,7 @@ man:
 html:
 	$(MAKE) -C doc html
 
-clean:#删除生成的.o文件、目标文件
+clean:#删除生成的.o文件、可执行文件
 	@rm -f *.o $(TARGETS)
 	@$(MAKE) -C Modules clean
 	@$(MAKE) -C doc clean
