@@ -59,6 +59,7 @@ USE_RESOLV=yes
 ENABLE_PING6_RTHDR=no
 
 # rdisc server (-r option) support [no|yes]
+#使能RDISC_SERVER
 ENABLE_RDISC_SERVER=no
 
 # -------------------------------------
@@ -105,19 +106,19 @@ ifneq ($(USE_IDN),no)
 endif
 
 # WITHOUT_IFADDRS: DEF_WITHOUT_IFADDRS
-ifneq ($(WITHOUT_IFADDRS),no)   #判断
+ifneq ($(WITHOUT_IFADDRS),no)   #判断WITHOUT_IFADDRS的开关是否为no
 	DEF_WITHOUT_IFADDRS = -DWITHOUT_IFADDRS
 endif
 
 # ENABLE_RDISC_SERVER: DEF_ENABLE_RDISC_SERVER
-ifneq ($(ENABLE_RDISC_SERVER),no)
+ifneq ($(ENABLE_RDISC_SERVER),no)   #判断ENABLE_RDISC_SERVER的开关是否为no
 	DEF_ENABLE_RDISC_SERVER = -DRDISC_SERVER
 endif
 
 # ENABLE_PING6_RTHDR: DEF_ENABLE_PING6_RTHDR
-ifneq ($(ENABLE_PING6_RTHDR),no)
+ifneq ($(ENABLE_PING6_RTHDR),no)     #判断ENABLE_PING6_RTHDR的开关是否为no
 	DEF_ENABLE_PING6_RTHDR = -DPING6_ENABLE_RTHDR
-ifeq ($(ENABLE_PING6_RTHDR),RFC3542)
+ifeq ($(ENABLE_PING6_RTHDR),RFC3542)   #判断ENABLE_PING6_RTHDR是否与RFC3542相等
 	DEF_ENABLE_PING6_RTHDR += -DPINR6_ENABLE_RTHDR_RFC3542
 endif
 endif
@@ -207,10 +208,10 @@ tftpd.o tftpsubs.o: tftp.h
 # ninfod
 ninfod:
 	@set -e; \
-		if [ ! -f ninfod/Makefile ]; then \
-			cd ninfod; \
-			./configure; \
-			cd ..; \
+		if [ ! -f ninfod/Makefile ]; then \  
+			cd ninfod; \  #进入ninfod这个目录
+			./configure; \  #执行configure
+			cd ..; \   # 回到主目录
 		fi; \
 		$(MAKE) -C ninfod
 
